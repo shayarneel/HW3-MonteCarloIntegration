@@ -15,6 +15,18 @@
 		D214ED5E259E46DE00602C2C /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D214ED33259E46DA00602C2C /* ContentView.swift */; };
 		D214ED5F259E46DE00602C2C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D214ED34259E46DE00602C2C /* Assets.xcassets */; };
 		D214ED60259E46DE00602C2C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D214ED34259E46DE00602C2C /* Assets.xcassets */; };
+		D214ED74259E47A000602C2C /* BoundingBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = D214ED73259E47A000602C2C /* BoundingBox.swift */; };
+		D214ED75259E47A000602C2C /* BoundingBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = D214ED73259E47A000602C2C /* BoundingBox.swift */; };
+		D214ED76259E47A000602C2C /* BoundingBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = D214ED73259E47A000602C2C /* BoundingBox.swift */; };
+		D214ED77259E47A000602C2C /* BoundingBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = D214ED73259E47A000602C2C /* BoundingBox.swift */; };
+		D214ED7D259E489700602C2C /* MonteCarloCircle.swift in Sources */ = {isa = PBXBuildFile; fileRef = D214ED7C259E489700602C2C /* MonteCarloCircle.swift */; };
+		D214ED7E259E489700602C2C /* MonteCarloCircle.swift in Sources */ = {isa = PBXBuildFile; fileRef = D214ED7C259E489700602C2C /* MonteCarloCircle.swift */; };
+		D214ED7F259E489700602C2C /* MonteCarloCircle.swift in Sources */ = {isa = PBXBuildFile; fileRef = D214ED7C259E489700602C2C /* MonteCarloCircle.swift */; };
+		D214ED80259E489700602C2C /* MonteCarloCircle.swift in Sources */ = {isa = PBXBuildFile; fileRef = D214ED7C259E489700602C2C /* MonteCarloCircle.swift */; };
+		D214ED86259E4FCC00602C2C /* DrawingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D214ED85259E4FCC00602C2C /* DrawingView.swift */; };
+		D214ED87259E4FCC00602C2C /* DrawingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D214ED85259E4FCC00602C2C /* DrawingView.swift */; };
+		D214ED88259E4FCC00602C2C /* DrawingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D214ED85259E4FCC00602C2C /* DrawingView.swift */; };
+		D214ED89259E4FCC00602C2C /* DrawingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D214ED85259E4FCC00602C2C /* DrawingView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +61,9 @@
 		D214ED54259E46DE00602C2C /* Tests macOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Tests macOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D214ED58259E46DE00602C2C /* Tests_macOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests_macOS.swift; sourceTree = "<group>"; };
 		D214ED5A259E46DE00602C2C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D214ED73259E47A000602C2C /* BoundingBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoundingBox.swift; sourceTree = "<group>"; };
+		D214ED7C259E489700602C2C /* MonteCarloCircle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonteCarloCircle.swift; sourceTree = "<group>"; };
+		D214ED85259E4FCC00602C2C /* DrawingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawingView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -100,6 +115,9 @@
 			children = (
 				D214ED32259E46DA00602C2C /* Monte_Carlo_IntegrationApp.swift */,
 				D214ED33259E46DA00602C2C /* ContentView.swift */,
+				D214ED85259E4FCC00602C2C /* DrawingView.swift */,
+				D214ED7C259E489700602C2C /* MonteCarloCircle.swift */,
+				D214ED73259E47A000602C2C /* BoundingBox.swift */,
 				D214ED34259E46DE00602C2C /* Assets.xcassets */,
 			);
 			path = Shared;
@@ -308,8 +326,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D214ED74259E47A000602C2C /* BoundingBox.swift in Sources */,
 				D214ED5D259E46DE00602C2C /* ContentView.swift in Sources */,
+				D214ED86259E4FCC00602C2C /* DrawingView.swift in Sources */,
 				D214ED5B259E46DE00602C2C /* Monte_Carlo_IntegrationApp.swift in Sources */,
+				D214ED7D259E489700602C2C /* MonteCarloCircle.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -317,8 +338,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D214ED75259E47A000602C2C /* BoundingBox.swift in Sources */,
 				D214ED5E259E46DE00602C2C /* ContentView.swift in Sources */,
+				D214ED87259E4FCC00602C2C /* DrawingView.swift in Sources */,
 				D214ED5C259E46DE00602C2C /* Monte_Carlo_IntegrationApp.swift in Sources */,
+				D214ED7E259E489700602C2C /* MonteCarloCircle.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -327,6 +351,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				D214ED4E259E46DE00602C2C /* Tests_iOS.swift in Sources */,
+				D214ED76259E47A000602C2C /* BoundingBox.swift in Sources */,
+				D214ED7F259E489700602C2C /* MonteCarloCircle.swift in Sources */,
+				D214ED88259E4FCC00602C2C /* DrawingView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -335,6 +362,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				D214ED59259E46DE00602C2C /* Tests_macOS.swift in Sources */,
+				D214ED77259E47A000602C2C /* BoundingBox.swift in Sources */,
+				D214ED80259E489700602C2C /* MonteCarloCircle.swift in Sources */,
+				D214ED89259E4FCC00602C2C /* DrawingView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
