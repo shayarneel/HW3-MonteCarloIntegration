@@ -68,6 +68,7 @@ struct ContentView: View {
             drawingView(redLayer:$monteCarlo.insideData, blueLayer: $monteCarlo.outsideData)
                 .padding()
                 .aspectRatio(1, contentMode: .fit)
+                .drawingGroup()
             // Stop the window shrinking to zero.
             Spacer()
             

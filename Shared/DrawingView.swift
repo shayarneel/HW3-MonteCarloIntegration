@@ -39,6 +39,7 @@ struct DrawingView_Previews: PreviewProvider {
         
         drawingView(redLayer: $redLayer, blueLayer: $blueLayer)
             .aspectRatio(1, contentMode: .fill)
+            //.drawingGroup()
            
     }
 }

@@ -119,7 +119,7 @@ class MonteCarloCircle: NSObject, ObservableObject {
         //Append the points to the arrays needed for the displays
         //Don't attempt to draw more than 250,000 points to keep the display updating speed reasonable.
         
-        if ((totalGuesses < 250001) || (insideData.count == 0)){
+        if ((totalGuesses < 1000001) || (insideData.count == 0)){
         
             insideData.append(contentsOf: newInsidePoints)
             outsideData.append(contentsOf: newOutsidePoints)
