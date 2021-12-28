@@ -60,6 +60,11 @@ struct ContentView: View {
                     .padding(.bottom, 5.0)
                     .disabled(monteCarlo.enableButton == false)
                 
+                if (!monteCarlo.enableButton){
+                    
+                    ProgressView()
+                }
+                
                 
             }
             .padding()
