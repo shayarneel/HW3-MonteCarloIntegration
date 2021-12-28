@@ -52,11 +52,13 @@ struct ContentView: View {
                         .padding()
                 }
                 
-                Button("Cycle Calculation", action: {self.calculatePi()})
+                Button("Cycle Calculation", action: {Task.init{await self.calculatePi()}})
                     .padding()
+                    .disabled(monteCarlo.enableButton == false)
                 
                 Button("Clear", action: {self.clear()})
                     .padding(.bottom, 5.0)
+                    .disabled(monteCarlo.enableButton == false)
                 
                 
             }
@@ -75,19 +77,22 @@ struct ContentView: View {
         }
     }
     
-    func calculatePi(){
+    func calculatePi() async {
+        
+        
+        monteCarlo.setButtonEnable(state: false)
         
         monteCarlo.guesses = Int(guessString)!
         monteCarlo.radius = radius
         monteCarlo.totalGuesses = Int(totalGuessString) ?? Int(0.0)
         
-        monteCarlo.calculatePI()
+        await monteCarlo.calculatePI()
         
         totalGuessString = monteCarlo.totalGuessesString
         
         piString =  monteCarlo.piString
         
-        
+        monteCarlo.setButtonEnable(state: true)
         
     }
     
@@ -100,6 +105,7 @@ struct ContentView: View {
         monteCarlo.totalIntegral = 0.0
         monteCarlo.insideData = []
         monteCarlo.outsideData = []
+        monteCarlo.firstTimeThroughLoop = true
         
         
     }

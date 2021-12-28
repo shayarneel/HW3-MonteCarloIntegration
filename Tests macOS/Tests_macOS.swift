@@ -62,14 +62,14 @@ class Tests_macOS: XCTestCase {
         XCTAssertEqual(surfaceArea, 31.92, accuracy: 0.000000001, "expected better from you")
     }
     
-    func testMonteCarloIntegral() {
+    func testMonteCarloIntegral() async {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct results.
         
-        let monteCarlo = MonteCarloCircle(withData: true)
+        let monteCarlo = await MonteCarloCircle(withData: true)
         
         monteCarlo.guesses = 9120217
-        monteCarlo.calculatePI()
+        await monteCarlo.calculatePI()
         
         let ourPI = Double(monteCarlo.piString)
         
