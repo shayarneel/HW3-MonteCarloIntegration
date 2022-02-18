@@ -10,50 +10,19 @@ import SwiftUI
 
 class BoundingBox: NSObject {
     
-    
-    /// calculateVolume
+    /// Area
     ///
     /// - Parameters:
-    ///   - lengthOfSide1: length of the first side
-    ///   - lengthOfSide2: length of the second side
-    ///   - lengthOfSide3: length of the third side
-    /// - Returns: returns the volume of a box
-    func calculateVolume(lengthOfSide1: Double, lengthOfSide2: Double, lengthOfSide3: Double) -> Double {
+    ///   - lowerBound: lower bound of integral
+    ///   - upperBound: upper bound of integral
+    ///   - min: lowest y-axis value within which you want to intergrate (take this value to be zero, unless the function goes below the x-axis, in which case this should be the minimum value of the function in within the bounds of integration)
+    ///   - max: highest y-axis value within which you want to intergrate (should be the maximum value of the function within the bounds of integration)
+    /// - Returns: Area of box
+    func Area(lowerBound: Double, upperBound: Double, min: Double, max: Double) -> Double {
         
-        return (lengthOfSide1*lengthOfSide2*lengthOfSide3)
+        let Area = (upperBound - lowerBound) * (max - min)
         
+        return (Area)
     }
-    
-    /// calculateSurfaceArea
-    ///
-    /// - Parameters:
-    ///   - numberOfSides: number of sides of the box
-    ///   - lengthOfSide1: length of the first side
-    ///   - lengthOfSide2: length of the second side
-    ///   - lengthOfSide3: length of the third side
-    /// - Returns: returns the surface area of the box
-    func calculateSurfaceArea(numberOfSides: Int, lengthOfSide1: Double, lengthOfSide2: Double, lengthOfSide3: Double) -> Double {
-        
-        var surfaceArea = 0.0
-        
-        
-        if numberOfSides == 2 {
-            
-            surfaceArea = lengthOfSide1*lengthOfSide2
-            
-        } else if numberOfSides == 6 {
-            
-            surfaceArea = 2*lengthOfSide1*lengthOfSide2 + 2*lengthOfSide2*lengthOfSide3 + 2*lengthOfSide1*lengthOfSide3
-            
-            
-        } else {
-            
-            surfaceArea = 0.0
-            
-        }
-        
-        return (surfaceArea)
-    }
-
 }
 

@@ -12,15 +12,20 @@ struct drawingView: View {
     @Binding var redLayer : [(xPoint: Double, yPoint: Double)]
     @Binding var blueLayer : [(xPoint: Double, yPoint: Double)]
     
+    @Binding var upperBound : String
+    @Binding var lowerBound : String
+    @Binding var min : String
+    @Binding var max : String
+    
     var body: some View {
     
         
         ZStack{
         
-            drawIntegral(drawingPoints: redLayer )
+            drawIntegral(drawingPoints: redLayer, upperBoundVal: Double(upperBound) ?? 1.0, lowerBoundVal: Double(lowerBound) ?? 0.0, minVal: Double(min) ?? 0.0, maxVal: Double(max) ?? 1.0)
                 .stroke(Color.red)
             
-            drawIntegral(drawingPoints: blueLayer )
+            drawIntegral(drawingPoints: blueLayer, upperBoundVal: Double(upperBound) ?? 1.0, lowerBoundVal: Double(lowerBound) ?? 0.0, minVal: Double(min) ?? 0.0, maxVal: Double(max) ?? 1.0)
                 .stroke(Color.blue)
         }
         .background(Color.white)
@@ -29,20 +34,20 @@ struct drawingView: View {
     }
 }
 
-struct DrawingView_Previews: PreviewProvider {
-    
-    @State static var redLayer : [(xPoint: Double, yPoint: Double)] = [(-0.5, 0.5), (0.5, 0.5), (0.0, 0.0), (0.0, 1.0)]
-    @State static var blueLayer : [(xPoint: Double, yPoint: Double)] = [(-0.5, -0.5), (0.5, -0.5), (0.9, 0.0)]
-    
-    static var previews: some View {
-       
-        
-        drawingView(redLayer: $redLayer, blueLayer: $blueLayer)
-            .aspectRatio(1, contentMode: .fill)
-            //.drawingGroup()
-           
-    }
-}
+//struct DrawingView_Previews: PreviewProvider {
+//
+//    @State static var redLayer : [(xPoint: Double, yPoint: Double)] = [(-0.5, 0.5), (0.5, 0.5), (0.0, 0.0), (0.0, 1.0)]
+//    @State static var blueLayer : [(xPoint: Double, yPoint: Double)] = [(-0.5, -0.5), (0.5, -0.5), (0.9, 0.0)]
+//
+//    static var previews: some View {
+//       
+//
+//        drawingView(redLayer: $redLayer, blueLayer: $blueLayer, upperBound: upperBound, lowerBound: lowerBound, min: min, max: max)
+//            .aspectRatio(1, contentMode: .fill)
+//            //.drawingGroup()
+//
+//    }
+//}
 
 
 
@@ -52,12 +57,17 @@ struct drawIntegral: Shape {
     let smoothness : CGFloat = 1.0
     var drawingPoints: [(xPoint: Double, yPoint: Double)]  ///Array of tuples
     
+    var upperBoundVal : Double
+    var lowerBoundVal : Double
+    var minVal : Double
+    var maxVal : Double
+    
     func path(in rect: CGRect) -> Path {
         
                
         // draw from the center of our rectangle
-        let center = CGPoint(x: rect.width / 2, y: rect.height / 2)
-        let scale = rect.width/2
+        let center = CGPoint(x: maxVal - minVal, y: upperBoundVal - lowerBoundVal)
+        let scale = rect.width
         
 
         // Create the Path for the display
@@ -66,7 +76,7 @@ struct drawIntegral: Shape {
         
         for item in drawingPoints {
             
-            path.addRect(CGRect(x: item.xPoint*Double(scale)+Double(center.x), y: item.yPoint*Double(scale)+Double(center.y), width: 1.0 , height: 1.0))
+            path.addRect(CGRect(x: item.xPoint*Double(scale)+Double(center.x), y: -(item.yPoint*Double(scale)+Double(center.y)) + rect.height, width: 1.0 , height: 1.0))
             
         }
 

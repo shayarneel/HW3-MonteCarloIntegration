@@ -8,20 +8,23 @@
 import Foundation
 import SwiftUI
 
-class MonteCarloCircle: NSObject, ObservableObject {
+class MonteCarloInt: NSObject, ObservableObject {
     
     @MainActor @Published var insideData = [(xPoint: Double, yPoint: Double)]()
     @MainActor @Published var outsideData = [(xPoint: Double, yPoint: Double)]()
     @Published var totalGuessesString = ""
     @Published var guessesString = ""
-    @Published var piString = ""
+    @Published var IntValString = ""
     @Published var enableButton = true
     
-    var pi = 0.0
+    var intval = 0.0
     var guesses = 1
     var totalGuesses = 0
     var totalIntegral = 0.0
-    var radius = 1.0
+    var lowerBoundVal = 1.0
+    var upperBoundVal = 1.0
+    var minVal = 1.0
+    var maxVal = 1.0
     var firstTimeThroughLoop = true
     
     @MainActor init(withData data: Bool){
@@ -34,12 +37,10 @@ class MonteCarloCircle: NSObject, ObservableObject {
     }
 
 
-    /// calculate the value of π
-    ///
-    /// - Calculates the Value of π using Monte Carlo Integration
+    /// calculate the value of decaying exponential integral using monte carlo integration
     ///
     /// - Parameter sender: Any
-    func calculatePI() async {
+    func calculateIntVal(lowerBoundVal: Double, upperBoundVal: Double, minVal: Double, maxVal: Double) async {
         
         var maxGuesses = 0.0
         let boundingBoxCalculator = BoundingBox() ///Instantiates Class needed to calculate the area of the bounding box.
@@ -47,7 +48,7 @@ class MonteCarloCircle: NSObject, ObservableObject {
         
         maxGuesses = Double(guesses)
         
-        let newValue = await calculateMonteCarloIntegral(radius: radius, maxGuesses: maxGuesses)
+        let newValue = await calculateMonteCarloIntegral(lowerBound: lowerBoundVal, upperBound: upperBoundVal, min: minVal, max: maxVal, maxGuesses: maxGuesses)
         
         totalIntegral = totalIntegral + newValue
         
@@ -57,13 +58,13 @@ class MonteCarloCircle: NSObject, ObservableObject {
         
         //totalGuessesString = "\(totalGuesses)"
         
-        ///Calculates the value of π from the area of a unit circle
+        ///Calculates the value of integral by normalizing to teh bounding box
         
-        pi = totalIntegral/Double(totalGuesses) * boundingBoxCalculator.calculateSurfaceArea(numberOfSides: 2, lengthOfSide1: 2.0*radius, lengthOfSide2: 2.0*radius, lengthOfSide3: 0.0)
+        intval = totalIntegral/Double(totalGuesses) * boundingBoxCalculator.Area(lowerBound: lowerBoundVal, upperBound: upperBoundVal, min: minVal, max: maxVal)
         
-        await updatePiString(text: "\(pi)")
+        await updateIntValString(text: "\(intval)")
         
-        //piString = "\(pi)"
+        //updates the numerically comptued integral
         
        
         
@@ -72,57 +73,49 @@ class MonteCarloCircle: NSObject, ObservableObject {
     /// calculates the Monte Carlo Integral of a Circle
     ///
     /// - Parameters:
-    ///   - radius: radius of circle
+    ///   - lowerBoundVal: lower bound of integral
+    ///   - upperBoundVal: upper bound of integral
+    ///   - minval: lowest y-axis value within which you want to intergrate (take this value to be zero, unless the function goes below the x-axis, in which case this should be the minimum value of the function in within the bounds of integration)
+    ///   - maxval: highest y-axis value within which you want to intergrate (should be the maximum value of the function within the bounds of integration)
     ///   - maxGuesses: number of guesses to use in the calculaton
     /// - Returns: ratio of points inside to total guesses. Must mulitply by area of box in calling function
-    func calculateMonteCarloIntegral(radius: Double, maxGuesses: Double) async -> Double {
+    func calculateMonteCarloIntegral(lowerBound: Double, upperBound: Double, min: Double, max: Double, maxGuesses: Double) async -> Double {
         
         var numberOfGuesses = 0.0
-        var pointsInRadius = 0.0
+        var pointUnderCurve = 0.0
         var integral = 0.0
         var point = (xPoint: 0.0, yPoint: 0.0)
-        var radiusPoint = 0.0
+        var intPoint = 0.0
         
         var newInsidePoints : [(xPoint: Double, yPoint: Double)] = []
         var newOutsidePoints : [(xPoint: Double, yPoint: Double)] = []
         
-        
         while numberOfGuesses < maxGuesses {
             
             /* Calculate 2 random values within the box */
-            /* Determine the distance from that point to the origin */
-            /* If the distance is less than the unit radius count the point being within the Unit Circle */
-            point.xPoint = Double.random(in: -radius...radius)
-            point.yPoint = Double.random(in: -radius...radius)
+            /* Determine the wether under the decaying exponential or not */
+            /* If the under the curve, point is added to integral */
+            point.xPoint = Double.random(in: lowerBound...upperBound)
+            point.yPoint = Double.random(in: min...max)
             
-            radiusPoint = sqrt(pow(point.xPoint,2.0) + pow(point.yPoint,2.0))
+            intPoint = exp(-point.xPoint) - point.yPoint
             
+            // if under the curve, add to the points under the curve
+                if((intPoint) >= 0.0) {
+                    pointUnderCurve += 1.0
+                    newInsidePoints.append(point)
+                    }
             
-            // if inside the circle add to the number of points in the radius
-            if((radius - radiusPoint) >= 0.0){
-                pointsInRadius += 1.0
-                
-                
-                newInsidePoints.append(point)
-               
-            }
-            else { //if outside the circle do not add to the number of points in the radius
-                
-                
-                newOutsidePoints.append(point)
-
-                
-            }
+            //if outside the curve, put in list of points outside curve
+                else {
+                    newOutsidePoints.append(point)
+                    }
             
             numberOfGuesses += 1.0
-            
-            
-            
-            
-            }
 
+            }
         
-        integral = Double(pointsInRadius)
+        integral = Double(pointUnderCurve)
         
         //Append the points to the arrays needed for the displays
         //Don't attempt to draw more than 250,000 points to keep the display updating speed reasonable.
@@ -149,6 +142,7 @@ class MonteCarloCircle: NSObject, ObservableObject {
             firstTimeThroughLoop = false
         }
         
+        await updateIntValString(text: String(integral))
         return integral
         }
     
@@ -156,8 +150,8 @@ class MonteCarloCircle: NSObject, ObservableObject {
     /// updateData
     /// The function runs on the main thread so it can update the GUI
     /// - Parameters:
-    ///   - insidePoints: points inside the circle of the given radius
-    ///   - outsidePoints: points outside the circle of the given radius
+    ///   - insidePoints: points inside the curve
+    ///   - outsidePoints: points outside the curve within the bounding box
     @MainActor func updateData(insidePoints: [(xPoint: Double, yPoint: Double)] , outsidePoints: [(xPoint: Double, yPoint: Double)]){
         
         insideData.append(contentsOf: insidePoints)
@@ -175,10 +169,10 @@ class MonteCarloCircle: NSObject, ObservableObject {
     
     /// updatePiString
     /// The function runs on the main thread so it can update the GUI
-    /// - Parameter text: contains the string containing the current value of Pi
-    @MainActor func updatePiString(text:String){
+    /// - Parameter text: contains the string containing the current value of intval
+    @MainActor func updateIntValString(text:String){
         
-        self.piString = text
+        self.IntValString = text
         
     }
     
@@ -188,26 +182,18 @@ class MonteCarloCircle: NSObject, ObservableObject {
     /// - Parameter state: Boolean describing whether the button should be enabled.
     @MainActor func setButtonEnable(state: Bool){
         
-        
         if state {
-            
             Task.init {
                 await MainActor.run {
-                    
-                    
                     self.enableButton = true
                 }
             }
-            
-            
+
                 
         }
         else{
-            
             Task.init {
                 await MainActor.run {
-                    
-                    
                     self.enableButton = false
                 }
             }

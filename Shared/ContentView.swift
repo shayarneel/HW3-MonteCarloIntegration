@@ -9,17 +9,24 @@ import SwiftUI
 
 struct ContentView: View {
     
-    @State var pi = 0.0
+    @State var intval = 0.0
     @State var totalGuesses = 0.0
     @State var totalIntegral = 0.0
-    @State var radius = 1.0
-    @State var guessString = "23458"
+    @State var lowerBoundVal = 1.0
+    @State var upperBoundVal = 1.0
+    @State var minVal = 1.0
+    @State var maxVal = 1.0
+    @State var guessString = "guesses"
+    @State var lowerBoundValString = "lower bound"
+    @State var upperBoundValString = "upper bound"
+    @State var minValString = "should be 0 if function is positively defined"
+    @State var maxValString = "maximum value of function in bounds of integration"
     @State var totalGuessString = "0"
-    @State var piString = "0.0"
+    @State var intValString = "0.0"
     
     
     // Setup the GUI to monitor the data from the Monte Carlo Integral Calculator
-    @ObservedObject var monteCarlo = MonteCarloCircle(withData: true)
+    @ObservedObject var monteCarloInt = MonteCarloInt(withData: true)
     
     //Setup the GUI View
     var body: some View {
@@ -37,6 +44,42 @@ struct ContentView: View {
                 .padding(.top, 5.0)
                 
                 VStack(alignment: .center) {
+                    Text("Lower Bound")
+                        .font(.callout)
+                        .bold()
+                    TextField("lower bound of integral", text: $lowerBoundValString)
+                        .padding()
+                }
+                .padding(.top, 5.0)
+                
+                VStack(alignment: .center) {
+                    Text("Upper Bound")
+                        .font(.callout)
+                        .bold()
+                    TextField("upper bound of integral", text: $upperBoundValString)
+                        .padding()
+                }
+                .padding(.top, 5.0)
+                
+                VStack(alignment: .center) {
+                    Text("Minimum Value")
+                        .font(.callout)
+                        .bold()
+                    TextField("should be 0 if function is positively defined", text: $minValString)
+                        .padding()
+                }
+                .padding(.top, 5.0)
+                
+                VStack(alignment: .center) {
+                    Text("Maximum Value")
+                        .font(.callout)
+                        .bold()
+                    TextField("maximum value of function in bounds of integration", text: $maxValString)
+                        .padding()
+                }
+                .padding(.top, 5.0)
+                
+                VStack(alignment: .center) {
                     Text("Total Guesses")
                         .font(.callout)
                         .bold()
@@ -45,22 +88,22 @@ struct ContentView: View {
                 }
                 
                 VStack(alignment: .center) {
-                    Text("π")
+                    Text("Integral")
                         .font(.callout)
                         .bold()
-                    TextField("# π", text: $piString)
+                    TextField("Value of Integral", text: $intValString)
                         .padding()
                 }
                 
                 Button("Cycle Calculation", action: {Task.init{await self.calculatePi()}})
                     .padding()
-                    .disabled(monteCarlo.enableButton == false)
+                    .disabled(monteCarloInt.enableButton == false)
                 
                 Button("Clear", action: {self.clear()})
                     .padding(.bottom, 5.0)
-                    .disabled(monteCarlo.enableButton == false)
+                    .disabled(monteCarloInt.enableButton == false)
                 
-                if (!monteCarlo.enableButton){
+                if (!monteCarloInt.enableButton){
                     
                     ProgressView()
                 }
@@ -72,7 +115,7 @@ struct ContentView: View {
             //DrawingField
             
             
-            drawingView(redLayer:$monteCarlo.insideData, blueLayer: $monteCarlo.outsideData)
+            drawingView(redLayer:$monteCarloInt.insideData, blueLayer: $monteCarloInt.outsideData, upperBound: $upperBoundValString, lowerBound: $lowerBoundValString, min: $minValString, max: $maxValString)
                 .padding()
                 .aspectRatio(1, contentMode: .fit)
                 .drawingGroup()
@@ -85,32 +128,39 @@ struct ContentView: View {
     func calculatePi() async {
         
         
-        monteCarlo.setButtonEnable(state: false)
+        monteCarloInt.setButtonEnable(state: false)
         
-        monteCarlo.guesses = Int(guessString)!
-        monteCarlo.radius = radius
-        monteCarlo.totalGuesses = Int(totalGuessString) ?? Int(0.0)
+        monteCarloInt.guesses = Int(guessString)!
+//        $monteCarloInt.lowerBound = lowerBoundVal
+//        $monteCarloInt.upperBound = upperBoundVal
+//        $monteCarloInt.min = minVal
+//        $monteCarloInt.max = maxVal
+        monteCarloInt.totalGuesses = Int(totalGuessString) ?? Int(0.0)
         
-        await monteCarlo.calculatePI()
+        await monteCarloInt.calculateIntVal(lowerBoundVal: Double(lowerBoundValString)!, upperBoundVal: Double(upperBoundValString)!, minVal: Double(minValString)!, maxVal: Double(maxValString)!)
         
-        totalGuessString = monteCarlo.totalGuessesString
+        totalGuessString = monteCarloInt.totalGuessesString
         
-        piString =  monteCarlo.piString
+        intValString = monteCarloInt.IntValString
         
-        monteCarlo.setButtonEnable(state: true)
+        monteCarloInt.setButtonEnable(state: true)
         
     }
     
     func clear(){
         
-        guessString = "23458"
+        guessString = "guesses"
         totalGuessString = "0.0"
-        piString =  ""
-        monteCarlo.totalGuesses = 0
-        monteCarlo.totalIntegral = 0.0
-        monteCarlo.insideData = []
-        monteCarlo.outsideData = []
-        monteCarlo.firstTimeThroughLoop = true
+        intValString =  ""
+        lowerBoundValString = "lower bound"
+        upperBoundValString = "upper bound"
+        minValString = "should be 0 if function is positively defined"
+        maxValString = "maximum value of function in bounds of integration"
+        monteCarloInt.totalGuesses = 0
+        monteCarloInt.totalIntegral = 0.0
+        monteCarloInt.insideData = []
+        monteCarloInt.outsideData = []
+        monteCarloInt.firstTimeThroughLoop = true
         
         
     }
